@@ -53,12 +53,11 @@ class Dog
     dog = Dog.new(name: name, breed: breed)
     dog.save
     dog
-  end 
+  end
 
   def update
-    sql = "UPDATE dogs SET name = ?, breed = ? WHERE id = ?"
+    sql = "UPDATE dogs SET name = ?, breed = ?  WHERE id = ?"
     DB[:conn].execute(sql, self.name, self.breed, self.id)
-    end
   end
 
   def save
@@ -66,10 +65,12 @@ class Dog
       self.update
     else
       sql = <<-SQL
-      INSERT INTO dogs(name, breed) VALUES (?,?)
+        INSERT INTO dogs (name, breed)
+        VALUES (?, ?)
       SQL
       DB[:conn].execute(sql, self.name, self.breed)
       @id = DB[:conn].execute("SELECT last_insert_rowid() FROM dogs")[0][0]
-      end
-      self
+    end
+    self
   end
+end 
